@@ -1,0 +1,50 @@
+{
+  "name": "lei-dev-server",
+  "version": "0.0.1",
+  "description": "简单的前端开发服务器",
+  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "devserver": "dist/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leizongmin/lei-dev-server.git"
+  },
+  "keywords": [
+    "dev",
+    "fe",
+    "server",
+    "reload"
+  ],
+  "author": "Zongmin Lei <leizongmin@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leizongmin/lei-dev-server/issues"
+  },
+  "homepage": "https://github.com/leizongmin/lei-dev-server#readme",
+  "dependencies": {
+    "browserify": "^13.1.1",
+    "colors": "^1.1.2",
+    "express": "^4.14.0",
+    "open": "0.0.5",
+    "watch": "^1.0.1",
+    "ws": "^1.1.1",
+    "yargs": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/browserify": "^12.0.30",
+    "@types/colors": "^0.6.33",
+    "@types/express": "^4.0.33",
+    "@types/node": "^6.0.46",
+    "@types/open": "0.0.29",
+    "@types/watch": "0.0.28",
+    "@types/ws": "0.0.35",
+    "@types/yargs": "^6.3.1"
+  }
+}
