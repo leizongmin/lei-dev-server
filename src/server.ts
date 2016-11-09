@@ -52,6 +52,7 @@ export = function (options: {
   watchDir: string,
   port: number,
   host: string,
+  openOnBrowser: boolean,
 }) {
 
   const server = http.createServer();
@@ -149,8 +150,13 @@ export = function (options: {
   server.on('request', app);
   server.listen(options.port, err => {
     if (err) throw err;
-    // open(`http://${ options.host }:${ options.port }/index.html`);
     log('服务器已启动');
+
+    if (options.openOnBrowser) {
+      const url = `http://${ options.host === '0.0.0.0' ? '127.0.0.1' : options.host }:${ options.port }`;
+      log('在浏览器打开 %s', url);
+      open(url);
+    }
   });
 
   // 监听全局错误
