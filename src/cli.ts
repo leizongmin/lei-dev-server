@@ -15,7 +15,7 @@ function printUsage() {
 ----------------------------------------
 使用方法：
 
-  $ devserver [options] [dir]
+  $ devserver [dir] [options]
     dir       项目根目录
     options   选项
 
@@ -37,7 +37,8 @@ if (argv.help) {
 // 项目根目录
 const dir = path.resolve(argv._[0] || '.');
 // 监听指定目录
-const watchDir = argv.w || argv.watchDir;
+let watchDir = argv.w || argv.watchDir;
+if (watchDir === true) watchDir = dir;
 // 服务器监听端口
 const port = Number(argv.p || argv.port || 3000);
 // 服务器监听地址

@@ -1,4 +1,12 @@
 body {
   background: #f8f8f8;
   color: #555555;
+  width: 80%;
+  margin: 100px auto 50px auto;
+}
+h1 {
+  text-align: center;
+}
+small {
+  font-size: 40%;
 }
