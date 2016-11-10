@@ -139,7 +139,7 @@ export = function (options: {
       less.render(buf.toString(), {
         plugins: [],
         filename: req.filename,
-      }, (err, ret) => {
+      }, (err: Less.RenderError, ret: Less.RenderOutput) => {
         if (err) {
           res.setHeader('content-type', 'text/css');
           const msg = `
