@@ -1,6 +1,6 @@
 /**
  * Dev-Server
- * 
+ *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
@@ -35,7 +35,7 @@ function bundleFile(file: string, callback: (err: Error, buf?: Buffer) => void) 
     log('打包文件 %s', file);
     const s = process.uptime();
     const b = browserify();
-    b.add(file).bundle((err: Error, buf) => {
+    b.add(file).bundle((err: Error, buf: Buffer) => {
       if (err) {
         log('打包文件 %s 出错：%s', file, colors.yellow(err.stack));
         return callback(err);
@@ -60,7 +60,7 @@ export = function (options: {
   const app = express();
 
   // 广播消息给所有客户端
-  function broadcast(data) {
+  function broadcast(data: string) {
     wss.clients.forEach(client => {
       client.send(data);
     });
@@ -80,7 +80,7 @@ export = function (options: {
   }
 
   // 根据请求生成绝对文件名
-  app.use(function (req: Request, res, next) {
+  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
     const i = req.url.indexOf('?');
     if (i === -1) {
       req.pathname = req.url;
@@ -94,7 +94,7 @@ export = function (options: {
   });
 
   // reload.js
-  app.use('/-/reload.js', function (req, res: express.Response, next) {
+  app.use('/-/reload.js', function (req: Request, res: express.Response, next: express.NextFunction) {
     bundleFile(path.resolve(__dirname, 'reload.js'), (err, buf) => {
       res.setHeader('content-type', 'text/javascript');
       res.end(buf);
@@ -102,7 +102,7 @@ export = function (options: {
   });
 
   // js文件
-  app.use(function (req: Request, res, next) {
+  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
     if (req.filename.slice(-3) !== '.js') return next();
     bundleFile(req.filename, (err, buf) => {
       if (err) return next(err);
@@ -112,7 +112,7 @@ export = function (options: {
   });
 
   // html文件
-  app.use(function (req: Request, res: express.Response, next) {
+  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
     if (req.filename.slice(-5) !== '.html') return next();
     fs.readFile(req.filename, (err, buf) => {
       if (err) return next(err);
@@ -134,21 +134,21 @@ export = function (options: {
   app.use(express.static(options.dir));
 
   // 文件不存在
-  app.use(function (req: Request, res: express.Response, next) {
+  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
     res.statusCode = 404;
     res.setHeader('content-type', 'text/html');
     res.end(`<h1>文件 ${ req.filename } 不存在</h1>`);
   });
 
   // 出错
-  app.use(function (err, req, res: express.Response, next) {
+  app.use(function (err: Error, req: Request, res: express.Response, next: express.NextFunction) {
     res.statusCode = 500;
     res.end(err.stack);
   });
 
   // 监听端口
   server.on('request', app);
-  server.listen(options.port, err => {
+  server.listen(options.port, (err: Error) => {
     if (err) throw err;
     log('服务器已启动');
 
@@ -160,10 +160,10 @@ export = function (options: {
   });
 
   // 监听全局错误
-  process.on('uncaughtException', err => {
+  process.on('uncaughtException', (err: Error) => {
     log('uncaughtException: %s', colors.red(err.stack));
   });
-  process.on('unhandledRejection', err => {
+  process.on('unhandledRejection', (err: Error) => {
     log('unhandledRejection: %s', colors.red(err.stack));
   });
 };

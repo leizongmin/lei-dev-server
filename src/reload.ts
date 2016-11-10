@@ -1,11 +1,11 @@
 /**
  * Dev-Server
- * 
+ *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-let ws;
-let tid;
+let ws: WebSocket;
+let tid: NodeJS.Timer;
 const delay = 5;
 
 function connect() {
@@ -27,7 +27,7 @@ function connect() {
       location.reload();
     }
   });
-  
+
   ws.addEventListener('close', () => {
     console.log('服务器已关闭连接，%s秒后自动重新连接', delay);
     tid = setTimeout(() => {
