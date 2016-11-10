@@ -14,6 +14,7 @@ import open = require('open');
 import WebSocket = require('ws');
 import colors = require('colors');
 import watch = require('watch');
+import less = require('less');
 
 // 扩展 Request 对象
 interface Request extends express.Request {
@@ -130,6 +131,32 @@ export = function (options: {
     });
   });
 
+  // less文件
+  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
+    if (req.filename.slice(-5) !== '.less') return next();
+    fs.readFile(req.filename, (err, buf) => {
+      if (err) return next(err);
+      less.render(buf.toString(), {
+        plugins: [],
+        filename: req.filename,
+      }, (err, ret) => {
+        if (err) {
+          res.setHeader('content-type', 'text/css');
+          const msg = `
+${ err.type } Error: ${ err.message }
+    at ${ err.filename }:${ err.line }:${ err.column }
+${ err.extract.join('\n') }
+          `.trim();
+          res.end(msg);
+          log('编译 less 出错：\n%s', colors.yellow(msg));
+          return;
+        }
+        res.setHeader('content-type', 'text/css');
+        res.end(ret.css);
+      });
+    });
+  });
+
   // 其它所有文件
   app.use(express.static(options.dir));
 
@@ -144,6 +171,7 @@ export = function (options: {
   app.use(function (err: Error, req: Request, res: express.Response, next: express.NextFunction) {
     res.statusCode = 500;
     res.end(err.stack);
+    log('%s %s 出错：%s', req.method, req.url, colors.yellow(err.stack));
   });
 
   // 监听端口
