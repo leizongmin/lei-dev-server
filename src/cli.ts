@@ -2,7 +2,7 @@
 
 /**
  * Dev-Server
- * 
+ *
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
@@ -59,7 +59,9 @@ if (argv.version) {
 const dir = path.resolve(argv._[0] || '.');
 // 监听指定目录
 let watchDir = argv.w || argv.watchDir;
-if (watchDir === true) watchDir = dir;
+if (watchDir === true) {
+  watchDir = dir;
+}
 // 服务器监听端口
 const port = Number(argv.p || argv.port || 3000);
 // 服务器监听地址

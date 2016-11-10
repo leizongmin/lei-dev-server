@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepublish": "npm run build"
+    "lint": "tslint src/*.ts",
+    "prepublish": "npm run lint && npm run build"
   },
   "repository": {
     "type": "git",

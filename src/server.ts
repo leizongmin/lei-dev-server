@@ -17,7 +17,7 @@ import watch = require('watch');
 import less = require('less');
 
 // 扩展 Request 对象
-interface Request extends express.Request {
+interface IRequest extends express.Request {
   filename: string;
   pathname: string;
 }
@@ -32,7 +32,9 @@ function log(...args: any[]) {
 // 打包日志文件
 function bundleFile(file: string, callback: (err: Error, buf?: Buffer) => void) {
   fs.exists(file, ok => {
-    if (!ok) return callback(new Error(`文件 ${ file } 不存在`));
+    if (!ok) {
+      return callback(new Error(`文件 ${ file } 不存在`));
+    }
     log('打包文件 %s', file);
     const s = process.uptime();
     const b = browserify();
@@ -81,21 +83,23 @@ export = function (options: {
   }
 
   // 根据请求生成绝对文件名
-  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
+  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
     const i = req.url.indexOf('?');
     if (i === -1) {
       req.pathname = req.url;
     } else {
       req.pathname = req.url.slice(0, i);
     }
-    if (req.pathname === '/') req.pathname = '/index.html';
+    if (req.pathname === '/') {
+      req.pathname = '/index.html';
+    }
     req.filename = path.resolve(options.dir, req.pathname.slice(1));
     log('%s %s', req.method, req.url);
     next();
   });
 
   // reload.js
-  app.use('/-/reload.js', function (req: Request, res: express.Response, next: express.NextFunction) {
+  app.use('/-/reload.js', function (req: IRequest, res: express.Response, next: express.NextFunction) {
     bundleFile(path.resolve(__dirname, 'reload.js'), (err, buf) => {
       res.setHeader('content-type', 'text/javascript');
       res.end(buf);
@@ -103,20 +107,28 @@ export = function (options: {
   });
 
   // js文件
-  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
-    if (req.filename.slice(-3) !== '.js') return next();
+  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
+    if (req.filename.slice(-3) !== '.js') {
+      return next();
+    }
     bundleFile(req.filename, (err, buf) => {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       res.setHeader('content-type', 'text/javascript');
       res.end(buf);
     });
   });
 
   // html文件
-  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
-    if (req.filename.slice(-5) !== '.html') return next();
+  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
+    if (req.filename.slice(-5) !== '.html') {
+      return next();
+    }
     fs.readFile(req.filename, (err, buf) => {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       // 响应页面
       res.setHeader('content-type', 'text/html');
       res.write(buf);
@@ -132,20 +144,24 @@ export = function (options: {
   });
 
   // less文件
-  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
-    if (req.filename.slice(-5) !== '.less') return next();
+  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
+    if (req.filename.slice(-5) !== '.less') {
+      return next();
+    }
     fs.readFile(req.filename, (err, buf) => {
-      if (err) return next(err);
+      if (err) {
+        return next(err);
+      }
       less.render(buf.toString(), {
-        plugins: [],
         filename: req.filename,
-      }, (err: Less.RenderError, ret: Less.RenderOutput) => {
-        if (err) {
+        plugins: [],
+      }, (err2: Less.RenderError, ret: Less.RenderOutput) => {
+        if (err2) {
           res.setHeader('content-type', 'text/css');
           const msg = `
-${ err.type } Error: ${ err.message }
-    at ${ err.filename }:${ err.line }:${ err.column }
-${ err.extract.join('\n') }
+${ err2.type } Error: ${ err2.message }
+    at ${ err2.filename }:${ err2.line }:${ err2.column }
+${ err2.extract.join('\n') }
           `.trim();
           res.end(msg);
           log('编译 less 出错：\n%s', colors.yellow(msg));
@@ -161,14 +177,14 @@ ${ err.extract.join('\n') }
   app.use(express.static(options.dir));
 
   // 文件不存在
-  app.use(function (req: Request, res: express.Response, next: express.NextFunction) {
+  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
     res.statusCode = 404;
     res.setHeader('content-type', 'text/html');
     res.end(`<h1>文件 ${ req.filename } 不存在</h1>`);
   });
 
   // 出错
-  app.use(function (err: Error, req: Request, res: express.Response, next: express.NextFunction) {
+  app.use(function (err: Error, req: IRequest, res: express.Response, next: express.NextFunction) {
     res.statusCode = 500;
     res.end(err.stack);
     log('%s %s 出错：%s', req.method, req.url, colors.yellow(err.stack));
@@ -177,7 +193,9 @@ ${ err.extract.join('\n') }
   // 监听端口
   server.on('request', app);
   server.listen(options.port, (err: Error) => {
-    if (err) throw err;
+    if (err) {
+      throw err;
+    }
     log('服务器已启动');
 
     if (options.openOnBrowser) {
