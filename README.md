@@ -93,6 +93,8 @@ $ devserver -w -o -p 8000
 + 如果启动服务器时使用了`-w`参数，则当目录下的任意文件有改动时，在浏览器中打开的HTML会自动刷新
 + 在 JavaScript 文件内，可以使用`require()`来载入模块，实际上会通过 Browserify 来进行打包
 
+详情可参考 [example](https://github.com/leizongmin/lei-dev-server/tree/master/example) 目录。
+
 
 ## License
 

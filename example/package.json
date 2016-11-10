@@ -1,0 +1,11 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "start": "devserver -w -o"
+  },
+  "author": "Zongmin Lei <leizongmin@gmail.com>",
+  "license": "MIT"
+}
