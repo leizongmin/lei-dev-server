@@ -1,5 +1,5 @@
 # lei-dev-server
-简单的前端开发服务器
+简单的前端开发工具，支持 less、CommonJS 和自动刷新页面
 
 ## 安装
 
