@@ -16,6 +16,10 @@ import watch = require('watch');
 import mime = require('mime');
 import { bundle } from './bundle';
 
+mime.define({
+  'text/css': [ 'css', 'less' ],
+});
+
 // 扩展 Request 对象
 interface IRequest extends express.Request {
   filename: string;
@@ -117,7 +121,7 @@ export = function (options: {
       if (data === null) {
         return next();
       }
-      log('打包文件 %s (耗时%ss)', req.filename, process.uptime() - t);
+      log('打包文件 %s (耗时%ss)', req.filename, (process.uptime() - t).toFixed(3));
       res.setHeader('content-type', mime.lookup(req.filename));
       res.end(data);
     });
