@@ -29,7 +29,6 @@ function log(...args: any[]) {
     colors.green(util.format(args[0], ...args.slice(1))));
 }
 
-
 // 启动服务器
 export = function (options: {
   dir: string,
