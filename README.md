@@ -11,20 +11,23 @@ $ npm install lei-dev-server -g
 ## 使用方法
 
 ```
-启动服务器：
+devserver v0.0.3
 
-  $ devserver [dir] [options]
-    dir       项目根目录
-    options   选项
+启动服务器:
 
-选项：
+  $ devserver [command] [options]
+
+启动Web服务:     $ devserver start
+选项:
+    -d, --dir=./            指定根目录
     -w, --watch-dir=./lib   监听指定目录下文件的变动，并自动刷新页面，默认关闭
     -p, --port=3000         服务器监听端口，默认3000
     -h, --host=127.0.0.1    服务器监听地址，默认127.0.0.1
     -o, --open              启动后在浏览器打开首页
 
-显示版本号：     $ devserver --version
-显示此帮助信息：  $ devserver --help
+打包文件:        $ devserver bundle <input_file> <output_file>
+显示版本号:      $ devserver version
+显示此帮助信息:  $ devserver help
 ```
 
 首先新建文件`index.html`：

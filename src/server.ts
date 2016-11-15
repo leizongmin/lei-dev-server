@@ -8,13 +8,13 @@ import fs = require('fs');
 import path = require('path');
 import http = require('http');
 import util = require('util');
-import browserify = require('browserify');
 import express = require('express');
 import open = require('open');
 import WebSocket = require('ws');
 import colors = require('colors');
 import watch = require('watch');
-import less = require('less');
+import mime = require('mime');
+import { bundle } from './bundle';
 
 // 扩展 Request 对象
 interface IRequest extends express.Request {
@@ -29,25 +29,6 @@ function log(...args: any[]) {
     colors.green(util.format(args[0], ...args.slice(1))));
 }
 
-// 打包日志文件
-function bundleFile(file: string, callback: (err: Error, buf?: Buffer) => void) {
-  fs.exists(file, ok => {
-    if (!ok) {
-      return callback(new Error(`文件 ${ file } 不存在`));
-    }
-    log('打包文件 %s', file);
-    const s = process.uptime();
-    const b = browserify();
-    b.add(file).bundle((err: Error, buf: Buffer) => {
-      if (err) {
-        log('打包文件 %s 出错：%s', file, colors.yellow(err.stack));
-        return callback(err);
-      }
-      log('打包文件 %s 完成，耗时 %s 秒', file, (process.uptime() - s).toFixed(3));
-      callback(null, buf);
-    });
-  });
-}
 
 // 启动服务器
 export = function (options: {
@@ -98,28 +79,6 @@ export = function (options: {
     next();
   });
 
-  // reload.js
-  app.use('/-/reload.js', function (req: IRequest, res: express.Response, next: express.NextFunction) {
-    bundleFile(path.resolve(__dirname, 'reload.js'), (err, buf) => {
-      res.setHeader('content-type', 'text/javascript');
-      res.end(buf);
-    });
-  });
-
-  // js文件
-  app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
-    if (req.filename.slice(-3) !== '.js') {
-      return next();
-    }
-    bundleFile(req.filename, (err, buf) => {
-      if (err) {
-        return next(err);
-      }
-      res.setHeader('content-type', 'text/javascript');
-      res.end(buf);
-    });
-  });
-
   // html文件
   app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
     if (req.filename.slice(-5) !== '.html') {
@@ -143,33 +102,25 @@ export = function (options: {
     });
   });
 
-  // less文件
+  // reload.js
+  app.use('/-/reload.js', function (req: IRequest, res: express.Response, next: express.NextFunction) {
+    req.filename = path.resolve(__dirname, 'reload.js');
+    next();
+  });
+
+  // 打包文件
   app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
-    if (req.filename.slice(-5) !== '.less') {
-      return next();
-    }
-    fs.readFile(req.filename, (err, buf) => {
+    const t = process.uptime();
+    bundle(req.filename, (err: Error, data: Buffer | string) => {
       if (err) {
         return next(err);
       }
-      less.render(buf.toString(), {
-        filename: req.filename,
-        plugins: [],
-      }, (err2: Less.RenderError, ret: Less.RenderOutput) => {
-        if (err2) {
-          res.setHeader('content-type', 'text/css');
-          const msg = `
-${ err2.type } Error: ${ err2.message }
-    at ${ err2.filename }:${ err2.line }:${ err2.column }
-${ err2.extract.join('\n') }
-          `.trim();
-          res.end(msg);
-          log('编译 less 出错：\n%s', colors.yellow(msg));
-          return;
-        }
-        res.setHeader('content-type', 'text/css');
-        res.end(ret.css);
-      });
+      if (data === null) {
+        return next();
+      }
+      log('打包文件 %s (耗时%ss)', req.filename, process.uptime() - t);
+      res.setHeader('content-type', mime.lookup(req.filename));
+      res.end(data);
     });
   });
 
