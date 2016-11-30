@@ -4,16 +4,16 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-import fs = require('fs');
-import path = require('path');
-import http = require('http');
-import util = require('util');
-import express = require('express');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as http from 'http';
+import * as util from 'util';
+import * as express from 'express';
 import open = require('open');
-import WebSocket = require('ws');
-import colors = require('colors');
-import watch = require('watch');
-import mime = require('mime');
+import * as WebSocket from 'ws';
+import * as colors from 'colors';
+import * as watch from 'watch';
+import * as mime from 'mime';
 import { bundle } from './bundle';
 
 mime.define({
@@ -34,7 +34,7 @@ function log(...args: any[]) {
 }
 
 // 启动服务器
-export = function (options: {
+export default function (options: {
   dir: string,
   watchDir: string,
   port: number,
@@ -166,4 +166,4 @@ export = function (options: {
   process.on('unhandledRejection', (err: Error) => {
     log('unhandledRejection: %s', colors.red(err.stack || ''));
   });
-};
+}

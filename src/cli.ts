@@ -6,10 +6,11 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-import path = require('path');
-import yargs = require('yargs');
-import colors = require('colors');
+import * as path from 'path';
+import * as yargs from 'yargs';
+import * as colors from 'colors';
 import { bundleFile } from './bundle';
+import startServer from './server';
 
 // 包信息
 const pkgInfo = require('../package.json');
@@ -91,7 +92,7 @@ if (command === 'help') {
 服务器地址: http://${ host }:${ port }
   `.trim());
 
-  require('./server')({ dir, watchDir, host, port, openOnBrowser });
+  startServer({ dir, watchDir, host, port, openOnBrowser });
 
 } else if (command === 'bundle') {
 

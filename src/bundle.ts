@@ -4,10 +4,10 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-import fs = require('fs');
-import path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 import less = require('less');
-import browserify = require('browserify');
+import * as browserify from 'browserify';
 import mkdirp = require('mkdirp');
 
 // 回调函数
