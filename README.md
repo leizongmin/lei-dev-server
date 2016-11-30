@@ -86,7 +86,7 @@ console.log('hello, world');
 在当前项目根目录下执行以下命令：
 
 ```bash
-$ devserver -w -o -p 8000
+$ devserver start -w -o -p 8000
 ```
 
 稍等几秒，服务器启动后会自动在浏览器打开地址`http://127.0.0.1:8000`即可看到显示的页面。
