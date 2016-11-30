@@ -11,7 +11,7 @@ import browserify = require('browserify');
 import mkdirp = require('mkdirp');
 
 // 回调函数
-export type ResultCallback = (err: Error, data?: Buffer | String) => void;
+export type ResultCallback = (err: Error | null | undefined, data?: Buffer | String | null) => void;
 
 // 打包js文件
 function bundleJSFile(file: string, callback: ResultCallback): void {
@@ -48,7 +48,7 @@ ${ err2.extract.join('\n') }
 }
 
 // 大包文件
-export function bundle(file: string, callback: (err: Error, data?: Buffer | string) => void): void {
+export function bundle(file: string, callback: ResultCallback): void {
   if (file.slice(-3) === '.js') {
     return bundleJSFile(file, callback);
   }

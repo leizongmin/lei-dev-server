@@ -141,7 +141,7 @@ export = function (options: {
   app.use(function (err: Error, req: IRequest, res: express.Response, next: express.NextFunction) {
     res.statusCode = 500;
     res.end(err.stack);
-    log('%s %s 出错：%s', req.method, req.url, colors.yellow(err.stack));
+    log('%s %s 出错：%s', req.method, req.url, colors.yellow(err.stack || ''));
   });
 
   // 监听端口
@@ -161,9 +161,9 @@ export = function (options: {
 
   // 监听全局错误
   process.on('uncaughtException', (err: Error) => {
-    log('uncaughtException: %s', colors.red(err.stack));
+    log('uncaughtException: %s', colors.red(err.stack || ''));
   });
   process.on('unhandledRejection', (err: Error) => {
-    log('unhandledRejection: %s', colors.red(err.stack));
+    log('unhandledRejection: %s', colors.red(err.stack || ''));
   });
 };

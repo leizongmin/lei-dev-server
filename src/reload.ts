@@ -5,12 +5,14 @@
  */
 
 let ws: WebSocket;
-let tid: NodeJS.Timer;
+let tid: NodeJS.Timer | null;
 const delay = 5;
 
 function connect() {
 
-  clearTimeout(tid);
+  if (tid) {
+    clearTimeout(tid);
+  }
   tid = null;
   console.log('尝试连接到服务器');
 
