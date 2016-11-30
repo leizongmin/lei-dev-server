@@ -48,8 +48,10 @@ function printVersion() {
 }
 
 // 打印出错信息并退出
-function die(msg: string, code?: number): void {
-  console.log(colors.red(msg));
+function die(msg?: string, code?: number): void {
+  if (msg) {
+    console.log(colors.red(msg));
+  }
   process.exit(code);
 }
 
