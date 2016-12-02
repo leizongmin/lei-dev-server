@@ -4,11 +4,11 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import less = require('less');
-import * as browserify from 'browserify';
-import mkdirp = require('mkdirp');
+import * as fs from "fs";
+import * as path from "path";
+import less = require("less");
+import * as browserify from "browserify";
+import mkdirp = require("mkdirp");
 
 // 回调函数
 export type ResultCallback = (err: Error | null | undefined, data?: Buffer | String | null) => void;
@@ -38,7 +38,7 @@ function bundleLessFile(file: string, callback: ResultCallback): void {
         const msg = `
 ${ err2.type } Error: ${ err2.message }
   at ${ err2.filename }:${ err2.line }:${ err2.column }
-${ err2.extract.join('\n') }
+${ err2.extract.join("\n") }
         `.trim();
         return callback(new Error(msg));
       }
@@ -49,10 +49,10 @@ ${ err2.extract.join('\n') }
 
 // 大包文件
 export function bundle(file: string, callback: ResultCallback): void {
-  if (file.slice(-3) === '.js') {
+  if (file.slice(-3) === ".js") {
     return bundleJSFile(file, callback);
   }
-  if (file.slice(-5) === '.less') {
+  if (file.slice(-5) === ".less") {
     return bundleLessFile(file, callback);
   }
   callback(null, null);

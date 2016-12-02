@@ -4,7 +4,6 @@
   ],
   "rules": {
     "no-console": [ false ],
-    "quotemark": [ true, "single", "avoid-escape" ],
     "no-var-requires": false
   }
 }

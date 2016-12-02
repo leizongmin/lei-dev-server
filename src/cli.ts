@@ -6,14 +6,14 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
-import * as path from 'path';
-import * as yargs from 'yargs';
-import * as colors from 'colors';
-import { bundleFile } from './bundle';
-import startServer from './server';
+import * as path from "path";
+import * as yargs from "yargs";
+import * as colors from "colors";
+import { bundleFile } from "./bundle";
+import startServer from "./server";
 
 // 包信息
-const pkgInfo = require('../package.json');
+const pkgInfo = require("../package.json");
 
 // 版本信息
 const versionInfo = `devserver v${ pkgInfo.version }`;
@@ -59,21 +59,21 @@ function die(msg?: string, code?: number): void {
 const argv = yargs.argv;
 
 // 命令
-const command = argv._[0] || '';
-if (command === 'help') {
+const command = argv._[0] || "";
+if (command === "help") {
 
   printUsage();
   process.exit();
 
-} else if (command === 'version') {
+} else if (command === "version") {
 
   printVersion();
   process.exit();
 
-} if (command === 'start') {
+} if (command === "start") {
 
   // 项目根目录
-  const dir = path.resolve(argv.d || argv.dir || '.');
+  const dir = path.resolve(argv.d || argv.dir || ".");
   // 监听指定目录
   let watchDir = argv.w || argv.watchDir;
   if (watchDir === true) {
@@ -82,19 +82,19 @@ if (command === 'help') {
   // 服务器监听端口
   const port = Number(argv.p || argv.port || 3000);
   // 服务器监听地址
-  const host = argv.h || argv.host || '127.0.0.1';
+  const host = argv.h || argv.host || "127.0.0.1";
   // 是否在浏览器打开
   const openOnBrowser = argv.o || argv.open || false;
 
   console.log(`
 项目根目录: ${ dir }
-监听根目录: ${ watchDir || '无' }
+监听根目录: ${ watchDir || "无" }
 服务器地址: http://${ host }:${ port }
   `.trim());
 
   startServer({ dir, watchDir, host, port, openOnBrowser });
 
-} else if (command === 'bundle') {
+} else if (command === "bundle") {
 
   let inFile = argv._[1];
   let outFile = argv._[2];
@@ -114,7 +114,7 @@ if (command === 'help') {
     if (err) {
       die(err.stack);
     }
-    console.log('OK');
+    console.log("OK");
     process.exit();
   });
 
