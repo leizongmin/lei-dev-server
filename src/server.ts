@@ -113,6 +113,10 @@ export default function (options: {
 
   // 打包文件
   app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {
+    // 不打包 node_modules 目录下的任何文件
+    if (req.filename.indexOf("/node_modules/") !== -1) {
+      return next();
+    }
     const t = process.uptime();
     bundle(req.filename, (err: Error, data: Buffer | string) => {
       if (err) {

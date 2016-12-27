@@ -1,6 +1,6 @@
 {
   "name": "lei-dev-server",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "简单的前端开发工具，支持 less、CommonJS 和自动刷新页面",
   "main": "index.js",
   "files": [
