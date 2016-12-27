@@ -4,6 +4,7 @@
  * @author Zongmin Lei <leizongmin@gmail.com>
  */
 
+/// <reference path="../types/globals.d.ts" />
 import * as fs from "fs";
 import * as path from "path";
 import * as http from "http";
@@ -15,6 +16,7 @@ import * as colors from "colors";
 import * as watch from "watch";
 import * as mime from "mime";
 import { bundle } from "./bundle";
+import proxy = require("http-proxy-middleware");
 
 mime.define({
   "text/css": [ "css", "less" ],
@@ -35,11 +37,12 @@ function log(...args: any[]) {
 
 // 启动服务器
 export default function (options: {
-  dir: string,
-  watchDir: string,
-  port: number,
-  host: string,
-  openOnBrowser: boolean,
+  dir: string;
+  watchDir: string;
+  port: number;
+  host: string;
+  openOnBrowser: boolean;
+  proxyTarget: string;
 }) {
 
   const server = http.createServer();
@@ -133,6 +136,11 @@ export default function (options: {
 
   // 其它所有文件
   app.use(express.static(options.dir));
+
+  // 是否开启代理到远程服务器
+  if (options.proxyTarget) {
+    app.use(proxy(options.proxyTarget));
+  }
 
   // 文件不存在
   app.use(function (req: IRequest, res: express.Response, next: express.NextFunction) {

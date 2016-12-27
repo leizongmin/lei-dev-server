@@ -24,6 +24,7 @@ devserver v0.0.3
     -p, --port=3000         服务器监听端口，默认3000
     -h, --host=127.0.0.1    服务器监听地址，默认127.0.0.1
     -o, --open              启动后在浏览器打开首页
+    --proxy=http://xxxx     其他无法处理的请求代理到指定服务器
 
 打包文件:        $ devserver bundle <input_file> <output_file>
 显示版本号:      $ devserver version
