@@ -4,6 +4,14 @@
   ],
   "rules": {
     "no-console": [ false ],
-    "no-var-requires": false
+    "no-var-requires": false,
+    "only-arrow-functions": [
+      false
+    ],
+    "no-reference": false,
+    "ordered-imports": [
+      false
+    ],
+    "arrow-parens": false
   }
 }
