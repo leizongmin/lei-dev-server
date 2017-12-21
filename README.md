@@ -1,4 +1,6 @@
 # lei-dev-server
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/leizongmin/lei-dev-server.svg)](https://greenkeeper.io/)
 简单的前端开发工具，支持 less、CommonJS 和自动刷新页面
 
 ## 安装
